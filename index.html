@@ -5,6 +5,17 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <script src="https://aframe.io/releases/1.4.1/aframe.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.2.2/dist/mindar-image-aframe.prod.js"></script>
+    <script>
+  // Força uma resolução de captura que equilibra nitidez e velocidade de processamento
+  window.MINDAR = {
+    IMAGE: {
+      defaultVideoConstraints: {
+        width: {ideal: 640},
+        height: {ideal: 480}
+      }
+    }
+  };
+</script>
     
     <style>
       /* Camada de interface para destravar o áudio */
@@ -29,12 +40,14 @@
       <button id="start-btn">VER REALIDADE AUMENTADA</button>
     </div>
 
-    <a-scene 
-      mindar-image="imageTargetSrc: https://clasiq-web.github.io/projeto/targets.mind; filterMinCF:0.0001; filterBeta: 0.001; missTolerance: 3; warmupTolerance: 3; maxTrack: 1;" 
-      color-space="sRGB" 
-      renderer="colorManagement: true, physicallyCorrectLights" 
-      vr-mode-ui="enabled: false" 
-      device-orientation-permission-ui="enabled: false">
+<a-scene 
+  mindar-image="imageTargetSrc: ...; 
+  filterMinCF: 0.00001; 
+  filterBeta: 0.1; 
+  missTolerance: 2; 
+  warmupTolerance: 2; 
+  maxTrack: 1;" 
+  ... >
       
       <a-assets>
         <video 

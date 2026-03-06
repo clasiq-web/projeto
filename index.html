@@ -1,35 +1,64 @@
+<!DOCTYPE html>
 <html>
   <head>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="apple-mobile-web-app-capable" content="yes">
     <script src="https://aframe.io/releases/1.4.1/aframe.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.2.2/dist/mindar-image-aframe.prod.js"></script>
+    
     <style>
-      /* Estilo para o botão de início */
+      /* Camada de interface para destravar o áudio */
       #ui-overlay {
         position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-        background: rgba(0,0,0,0.8); z-index: 999;
-        display: flex; align-items: center; justify-content: center;
+        background: rgba(0,0,0,0.85); z-index: 9999;
+        display: flex; flex-direction: column; align-items: center; justify-content: center;
+        color: white; font-family: sans-serif; text-align: center;
       }
       #start-btn {
-        padding: 20px 40px; font-size: 20px; color: white; background: #007bff;
-        border: none; border-radius: 10px; cursor: pointer;
+        padding: 20px 40px; font-size: 18px; color: white; background: #28a745;
+        border: none; border-radius: 50px; cursor: pointer; font-weight: bold;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.3);
       }
+      p { margin-bottom: 20px; padding: 0 20px; }
     </style>
   </head>
+
   <body>
     <div id="ui-overlay">
-      <button id="start-btn">Clique para Iniciar a RA</button>
+      <p>Prepare o livro e clique no botão para iniciar a experiência.</p>
+      <button id="start-btn">VER REALIDADE AUMENTADA</button>
     </div>
 
-    <a-scene mindar-image="imageTargetSrc: https://clasiq-web.github.io/projeto/targets.mind;" color-space="sRGB" renderer="colorManagement: true, physicallyCorrectLights" vr-mode-ui="enabled: false" device-orientation-permission-ui="enabled: false">
+    <a-scene 
+      mindar-image="imageTargetSrc: https://seu-usuario.github.io/ar-livro/targets.mind; filterMinCF:0.0001; filterBeta: 0.001; missTolerance: 3; warmupTolerance: 3; maxTrack: 1;" 
+      color-space="sRGB" 
+      renderer="colorManagement: true, physicallyCorrectLights" 
+      vr-mode-ui="enabled: false" 
+      device-orientation-permission-ui="enabled: false">
+      
       <a-assets>
-        <video id="meuVideo" src="https://clasiq-web.github.io/projeto/video.mp4" preload="auto" loop="true" crossorigin="anonymous" webkit-playsinline playsinline></video>
+        <video 
+          id="meuVideo" 
+          src="https://seu-usuario.github.io/ar-livro/video-capa.mp4" 
+          preload="auto" 
+          loop="true" 
+          crossorigin="anonymous" 
+          webkit-playsinline 
+          playsinline>
+        </video>
       </a-assets>
 
-      <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
+      <a-camera position="0 0 0" look-controls="enabled: false" cursor="fuse: false; rayOrigin: mouse;"></a-camera>
 
       <a-entity mindar-image-target="targetIndex: 0">
-        <a-video src="#meuVideo" position="0 0 0" height="1.6" width="1" rotation="0 0 0" scale="1.05 1.05 1"></a-video>
+        <a-video 
+          src="#meuVideo" 
+          position="0 0 0" 
+          height="1.6" 
+          width="1" 
+          scale="1.05 1.05 1" 
+          rotation="0 0 0">
+        </a-video>
       </a-entity>
     </a-scene>
 
@@ -38,18 +67,22 @@
       const startBtn = document.querySelector('#start-btn');
       const overlay = document.querySelector('#ui-overlay');
 
-      // O "truque" para destravar o áudio
+      // Ao clicar, o navegador autoriza o áudio do vídeo
       startBtn.addEventListener('click', () => {
-        video.play(); // Toca o vídeo para o navegador autorizar
-        video.pause(); // Pausa imediatamente até o alvo ser encontrado
-        overlay.style.display = 'none'; // Esconde o botão
+        video.play();
+        video.pause(); // Fica em standby até o sistema achar o livro
+        overlay.style.display = 'none';
       });
 
+      // Lógica de play/pause baseada na visibilidade do livro
       const scene = document.querySelector('a-scene');
       scene.addEventListener('targetFound', event => {
+        console.log("Livro encontrado!");
         video.play();
       });
+
       scene.addEventListener('targetLost', event => {
+        console.log("Livro perdido.");
         video.pause();
       });
     </script>

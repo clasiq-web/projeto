@@ -38,7 +38,7 @@
 
   <body>
     <div id="ui-overlay">
-      <p>Prepare o livro e clique abaixo<br>para iniciar a experiência. (Teste 01) </p>
+      <p>Prepare o livro e clique abaixo<br>para iniciar a experiência. (Teste 02) </p>
       <button id="start-btn">VER REALIDADE AUMENTADA</button>
     </div>
 
@@ -46,8 +46,8 @@
       mindar-image="imageTargetSrc: https://clasiq-web.github.io/projeto/targets0.mind; 
       filterMinCF: 0.00001; 
       filterBeta: 0.5; 
-      missTolerance: 5; 
-      warmupTolerance: 5; 
+      missTolerance: 1; 
+      warmupTolerance: 1; 
       maxTrack: 1;" 
       color-space="sRGB" 
       renderer="colorManagement: true, physicallyCorrectLights" 
@@ -61,7 +61,7 @@
       <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
 
       <a-entity mindar-image-target="targetIndex: 0" smooth="true" rotation-smoothing="0.01" position-smoothing="0.01">
-        <a-video src="#meuVideo" position="0 0 0" height="1.6" width="1" scale="1.05 1.05 1" rotation="0 0 0"></a-video>
+        <a-video src="#meuVideo" position="0 0 -0.1" height="1.6" width="1" scale="1.05 1.05 1" rotation="0 0 0"></a-video>
       </a-entity>
     </a-scene>
 

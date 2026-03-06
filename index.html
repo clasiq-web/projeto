@@ -3,10 +3,25 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <script src="https://aframe.io/releases/1.4.1/aframe.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.2.2/dist/mindar-image-aframe.prod.js"></script>
+    <style>
+      /* Estilo para o botão de início */
+      #ui-overlay {
+        position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+        background: rgba(0,0,0,0.8); z-index: 999;
+        display: flex; align-items: center; justify-content: center;
+      }
+      #start-btn {
+        padding: 20px 40px; font-size: 20px; color: white; background: #007bff;
+        border: none; border-radius: 10px; cursor: pointer;
+      }
+    </style>
   </head>
   <body>
+    <div id="ui-overlay">
+      <button id="start-btn">Clique para Iniciar a RA</button>
+    </div>
+
     <a-scene mindar-image="imageTargetSrc: https://clasiq-web.github.io/projeto/targets.mind;" color-space="sRGB" renderer="colorManagement: true, physicallyCorrectLights" vr-mode-ui="enabled: false" device-orientation-permission-ui="enabled: false">
-      
       <a-assets>
         <video id="meuVideo" src="https://clasiq-web.github.io/projeto/video.mp4" preload="auto" loop="true" crossorigin="anonymous" webkit-playsinline playsinline></video>
       </a-assets>
@@ -20,9 +35,23 @@
 
     <script>
       const video = document.querySelector('#meuVideo');
+      const startBtn = document.querySelector('#start-btn');
+      const overlay = document.querySelector('#ui-overlay');
+
+      // O "truque" para destravar o áudio
+      startBtn.addEventListener('click', () => {
+        video.play(); // Toca o vídeo para o navegador autorizar
+        video.pause(); // Pausa imediatamente até o alvo ser encontrado
+        overlay.style.display = 'none'; // Esconde o botão
+      });
+
       const scene = document.querySelector('a-scene');
-      scene.addEventListener('targetFound', event => { video.play(); });
-      scene.addEventListener('targetLost', event => { video.pause(); });
+      scene.addEventListener('targetFound', event => {
+        video.play();
+      });
+      scene.addEventListener('targetLost', event => {
+        video.pause();
+      });
     </script>
   </body>
 </html>
